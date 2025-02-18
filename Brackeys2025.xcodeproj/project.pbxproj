@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 48FF771E2D63437900EFBEAC /* AdaEngine */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		48FF770B2D63433400EFBEAC /* Brackeys2025.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brackeys2025.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = Brackeys2025;
 			packageProductDependencies = (
+				48FF771E2D63437900EFBEAC /* AdaEngine */,
 			);
 			productName = Brackeys2025;
 			productReference = 48FF770B2D63433400EFBEAC /* Brackeys2025.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 48FF77022D63433400EFBEAC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				48FF771D2D63437900EFBEAC /* XCLocalSwiftPackageReference "../AdaEngine" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 48FF770C2D63433400EFBEAC /* Products */;
 			projectDirPath = "";
@@ -245,6 +254,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Brackeys2025/Brackeys2025.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Brackeys2025/Preview Content\"";
@@ -272,6 +282,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.2;
@@ -284,6 +295,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Brackeys2025/Brackeys2025.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Brackeys2025/Preview Content\"";
@@ -311,6 +323,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.2;
@@ -339,6 +352,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		48FF771D2D63437900EFBEAC /* XCLocalSwiftPackageReference "../AdaEngine" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../AdaEngine;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		48FF771E2D63437900EFBEAC /* AdaEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AdaEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 48FF77032D63433400EFBEAC /* Project object */;
 }

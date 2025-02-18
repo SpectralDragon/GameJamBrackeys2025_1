@@ -1,0 +1,96 @@
+{
+  "originHash" : "114b62ce5efcd06688ba82308faea4cff80438841f2a1248148fcb958cd26722",
+  "pins" : [
+    {
+      "identity" : "box2d",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/box2d",
+      "state" : {
+        "branch" : "main",
+        "revision" : "560e48409753e28bd81607c15f3d3f6b298feb0e"
+      }
+    },
+    {
+      "identity" : "glslang",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/glslang",
+      "state" : {
+        "branch" : "main",
+        "revision" : "28dab900903b7341ef7dbab89df1e44958b8a8b0"
+      }
+    },
+    {
+      "identity" : "libpng",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/libpng",
+      "state" : {
+        "branch" : "main",
+        "revision" : "22465834d2d062f9d8ab5b7fcb5955df6d678c2b"
+      }
+    },
+    {
+      "identity" : "miniaudio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/miniaudio",
+      "state" : {
+        "branch" : "master",
+        "revision" : "490c6955d4fa1d9307123abc379818f561d80394"
+      }
+    },
+    {
+      "identity" : "msdf-atlas-gen",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/msdf-atlas-gen",
+      "state" : {
+        "branch" : "master",
+        "revision" : "5db5b7f5136ce124ccc2c1b84a424b835f0b9f64"
+      }
+    },
+    {
+      "identity" : "spirv-cross",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AdaEngine/SPIRV-Cross",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e67c6acc5b577a36f9166d70bfd5c5dc6f8cdbe9"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections",
+      "state" : {
+        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
+        "version" : "1.1.4"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log",
+      "state" : {
+        "revision" : "96a2f8a0fa41e9e09af4585e2724c4e825410b91",
+        "version" : "1.6.2"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "2bc86522d115234d1f588efe2bcb4ce4be8f8b82",
+        "version" : "510.0.3"
+      }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams",
+      "state" : {
+        "revision" : "2688707e563b44d7d87c29ba6c5ca04ce86ae58b",
+        "version" : "5.3.0"
+      }
+    }
+  ],
+  "version" : 3
+}

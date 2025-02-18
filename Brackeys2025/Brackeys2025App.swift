@@ -5,13 +5,14 @@
 //  Created by vladislav.prusakov on 17.02.2025.
 //
 
-import SwiftUI
+import AdaEngine
 
 @main
 struct Brackeys2025App: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    var scene: some AppScene {
+        GameAppScene {
+            MainScene()
         }
+        .windowMode(.windowed)
     }
 }
