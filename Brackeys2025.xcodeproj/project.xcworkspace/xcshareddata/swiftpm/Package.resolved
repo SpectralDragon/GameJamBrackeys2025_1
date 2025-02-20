@@ -1,5 +1,5 @@
 {
-  "originHash" : "114b62ce5efcd06688ba82308faea4cff80438841f2a1248148fcb958cd26722",
+  "originHash" : "2fba548bfb3c24713f1a97be1315dd1c5624860e7067410a62a2b2d47e66c6bd",
   "pins" : [
     {
       "identity" : "box2d",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "96a2f8a0fa41e9e09af4585e2724c4e825410b91",
-        "version" : "1.6.2"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
       }
     },
     {

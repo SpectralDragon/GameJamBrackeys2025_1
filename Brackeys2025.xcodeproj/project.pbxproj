@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 48FF771E2D63437900EFBEAC /* AdaEngine */; };
+		7CB893C12D6755A20049FC69 /* AdaEngineEmbeddable in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB893C02D6755A20049FC69 /* AdaEngineEmbeddable */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CB893C12D6755A20049FC69 /* AdaEngineEmbeddable in Frameworks */,
 				48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,6 +40,7 @@
 			isa = PBXGroup;
 			children = (
 				48FF770D2D63433400EFBEAC /* Brackeys2025 */,
+				7CB893BF2D6755A20049FC69 /* Frameworks */,
 				48FF770C2D63433400EFBEAC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,6 +51,13 @@
 				48FF770B2D63433400EFBEAC /* Brackeys2025.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7CB893BF2D6755A20049FC69 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,6 +81,7 @@
 			name = Brackeys2025;
 			packageProductDependencies = (
 				48FF771E2D63437900EFBEAC /* AdaEngine */,
+				7CB893C02D6755A20049FC69 /* AdaEngineEmbeddable */,
 			);
 			productName = Brackeys2025;
 			productReference = 48FF770B2D63433400EFBEAC /* Brackeys2025.app */;
@@ -364,6 +375,11 @@
 		48FF771E2D63437900EFBEAC /* AdaEngine */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AdaEngine;
+		};
+		7CB893C02D6755A20049FC69 /* AdaEngineEmbeddable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48FF771D2D63437900EFBEAC /* XCLocalSwiftPackageReference "../AdaEngine" */;
+			productName = AdaEngineEmbeddable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
