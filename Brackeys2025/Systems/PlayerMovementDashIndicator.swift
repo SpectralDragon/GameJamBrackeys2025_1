@@ -47,7 +47,7 @@ struct PlayerMovementDashIndicator: System {
             }
             
             let mousePosition = Input.getMousePosition()
-            let globalTransform = context.scene.worldTransformMatrix(for: cameraEntity)
+            let globalTransform = cameraEntity.components[GlobalTransform.self]!.matrix
             let position = camera.viewportToWorld2D(cameraGlobalTransform: globalTransform, viewportPosition: mousePosition) ?? .zero
             
             let endPositionVector = Vector2(position.x, -position.y)

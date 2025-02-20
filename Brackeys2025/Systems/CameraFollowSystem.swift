@@ -15,7 +15,7 @@ struct CameraFollowSystem: System {
     static let cameras = EntityQuery(where: .has(Camera.self) && .has(Transform.self))
     static let player = EntityQuery(where: .has(PlayerComponent.self) && .has(Transform.self))
     
-    private let cameraOffset: Vector3 = [0, 1, 0]
+    private let cameraOffset: Vector3 = [0, 0, 0]
     private let speed: Float = 0.7
     
     static var dependencies: [SystemDependency] = [

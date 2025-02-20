@@ -49,7 +49,8 @@ struct PlayerMovementSystem: System {
             
             if Input.isMouseButtonPressed(.left) {
                 if impulseArrow.startPosition == nil {
-                    let globalTransform = context.scene.worldTransformMatrix(for: cameraEntity)
+                    let globalTransform = cameraEntity.components[GlobalTransform.self]!.matrix
+                    print("camera global", globalTransform.origin)
                     if let position = camera.viewportToWorld2D(cameraGlobalTransform: globalTransform, viewportPosition: mousePosition) {
                         let vector = Vector2(position.x, -position.y)
                         print("Start:", vector)
@@ -59,7 +60,7 @@ struct PlayerMovementSystem: System {
                 }
             } else {
                 if let startPosition = impulseArrow.startPosition {
-                    let globalTransform = context.scene.worldTransformMatrix(for: cameraEntity)
+                    let globalTransform = cameraEntity.components[GlobalTransform.self]!.matrix
                     let position = camera.viewportToWorld2D(
                         cameraGlobalTransform: globalTransform,
                         viewportPosition: mousePosition
@@ -72,13 +73,12 @@ struct PlayerMovementSystem: System {
                     }
                     
                     print("End:", endPositionVector)
-                    let direction = (endPositionVector - startPosition).normalized * 100
-                    print("Direction", endPositionVector)
-                    //                    physicsBody.applyForce(force: direction, point: .zero, wake: true)
+                    let direction = clamp((endPositionVector - startPosition).normalized * 100, Vector2(-1, -1), .one)
+                    print("Direction", direction)
+                    physicsBody.applyForce(force: direction, point: .zero, wake: true)
                     impulseArrow.startPosition = nil
                     
                     self.dispawnDashIndicator(context: context)
-                    
                 }
             }
             
