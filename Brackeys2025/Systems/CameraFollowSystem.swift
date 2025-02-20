@@ -15,6 +15,9 @@ struct CameraFollowSystem: System {
     static let cameras = EntityQuery(where: .has(Camera.self) && .has(Transform.self))
     static let player = EntityQuery(where: .has(PlayerComponent.self) && .has(Transform.self))
     
+    private let cameraOffset: Vector3 = [0, 1, 0]
+    private let speed: Float = 0.7
+    
     static var dependencies: [SystemDependency] = [
         .after(Physics2DSystem.self)
     ]
@@ -34,15 +37,11 @@ struct CameraFollowSystem: System {
         
         let playerTransform = player.components[Transform.self]!
         var cameraTransform = camera.components[Transform.self]!
-//        cameraTransform.position.z = playerTransform.position.z
-//        let targetDirection = (playerTransform.position - cameraTransform.position);
-//        let interpVelocity = targetDirection.magnitudeSquared * 5;
-//        
-//        let targetPos = cameraTransform.position + (targetDirection.normalized * interpVelocity * context.deltaTime);
-//        cameraTransform.position = Math.lerp()//Vector3.Lerp( transform.position, targetPos + offset, 0.25f);
-        
-        cameraTransform.position.x = playerTransform.position.x
-        cameraTransform.position.y = playerTransform.position.y
+        cameraTransform.position = lerp(
+            cameraTransform.position,
+            playerTransform.position + cameraOffset,
+            speed * context.deltaTime
+        )
         camera.components[Transform.self] = cameraTransform
     }
 }
