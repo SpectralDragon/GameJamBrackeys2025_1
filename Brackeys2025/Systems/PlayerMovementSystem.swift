@@ -27,55 +27,67 @@ struct PlayerMovementSystem: System {
         where: .has(DashIndicator.self)
     )
     
+    private let forceMultiplier: Float = 2
+    private let forceRestriction: Float = 120
+    
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        #if DEBUG
         guard let cameraEntity = context.scene.performQuery(Self.camera).first else {
             assertionFailure("Can't find required camera")
             return
         }
         
-        let camera = cameraEntity.components[Camera.self]!
-        #if DEBUG
         cameraControl(cameraEntity, deltaTime: context.deltaTime)
         #endif
         
         context.scene.performQuery(Self.player).forEach { player in
-            var (physicsBody, impulseArrow) = player.components[
+            var (playerComponent, physicsBody, impulseArrow) = player.components[
+                PlayerComponent.self,
                 PhysicsBody2DComponent.self,
                 PlayerImpulseArrow.self
             ]
-            let mousePosition = Input.getMousePosition()
+            let rawMousePosition = Input.getMousePosition()
+            let mousePosition = Vector2(rawMousePosition.x, -rawMousePosition.y)
+            
+            playerComponent.direction = physicsBody.linearVelocity
+            player.components += playerComponent
+            
+            guard playerComponent.dashCount > 0 else {
+                return
+            }
             
             if Input.isMouseButtonPressed(.left) {
                 if impulseArrow.startPosition == nil {
-                    let globalTransform = cameraEntity.components[GlobalTransform.self]!.matrix
-                    print("camera global", globalTransform.origin)
-                    if let position = camera.viewportToWorld2D(cameraGlobalTransform: globalTransform, viewportPosition: mousePosition) {
-                        let vector = Vector2(position.x, -position.y)
-                        print("Start:", vector)
-                        impulseArrow.startPosition = vector
-                        self.spawnDashIndicator(at: vector, context: context)
-                    }
+                    impulseArrow.startPosition = mousePosition
+                    self.spawnDashIndicator(at: mousePosition, context: context)
                 }
             } else {
                 if let startPosition = impulseArrow.startPosition {
-                    let globalTransform = cameraEntity.components[GlobalTransform.self]!.matrix
-                    let position = camera.viewportToWorld2D(
-                        cameraGlobalTransform: globalTransform,
-                        viewportPosition: mousePosition
-                    ) ?? .zero
+                    let endPositionVector = mousePosition
                     
-                    let endPositionVector = Vector2(position.x, -position.y)
+                    // If start and end position are the same, then stop the movement
                     if startPosition == endPositionVector {
                         impulseArrow.startPosition = nil
                         return
                     }
+                        
+                    let direction = endPositionVector - startPosition
+                    let swipeMagnitude = direction.magnitudeSquared / 2
+                    let forceDirection = direction.normalized
                     
-                    print("End:", endPositionVector)
-                    let direction = clamp((endPositionVector - startPosition).normalized * 100, Vector2(-1, -1), .one)
-                    print("Direction", direction)
-                    physicsBody.applyForce(force: direction, point: .zero, wake: true)
+                    let force = forceDirection * Float(swipeMagnitude) * forceMultiplier
+                    
+                    physicsBody.clearForces()
+                    physicsBody.applyForce(
+                        force: Vector2(
+                            clamp(force.x, -forceRestriction, forceRestriction),
+                            clamp(force.y, -forceRestriction, forceRestriction)
+                        ),
+                        point: .zero,
+                        wake: true
+                    )
                     impulseArrow.startPosition = nil
                     
                     self.dispawnDashIndicator(context: context)
@@ -85,7 +97,9 @@ struct PlayerMovementSystem: System {
             player.components += impulseArrow
         }
     }
-    
+}
+
+private extension PlayerMovementSystem {
 #if DEBUG
     @MainActor
     func cameraControl(_ camera: Entity, deltaTime: Float) {

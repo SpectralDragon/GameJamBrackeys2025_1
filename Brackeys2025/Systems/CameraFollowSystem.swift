@@ -16,10 +16,13 @@ struct CameraFollowSystem: System {
     static let player = EntityQuery(where: .has(PlayerComponent.self) && .has(Transform.self))
     
     private let cameraOffset: Vector3 = [0, 0, 0]
-    private let speed: Float = 0.7
+    private let speed: Float = 1
+    private let bounds: Rect = Rect(x: -3, y: -5,
+                                    width: 3, height: 15)
     
     static var dependencies: [SystemDependency] = [
-        .after(Physics2DSystem.self)
+        .after(Physics2DSystem.self),
+        .after(PlayerMovementSystem.self)
     ]
     
     init(scene: AdaEngine.Scene) { }
@@ -31,17 +34,21 @@ struct CameraFollowSystem: System {
         }
         
         guard let player = context.scene.performQuery(Self.player).first else {
-            assertionFailure("Player not found in scene")
             return
         }
         
         let playerTransform = player.components[Transform.self]!
         var cameraTransform = camera.components[Transform.self]!
-        cameraTransform.position = lerp(
+        
+        var targetPosition = lerp(
             cameraTransform.position,
             playerTransform.position + cameraOffset,
             speed * context.deltaTime
         )
-        camera.components[Transform.self] = cameraTransform
+        
+        targetPosition.x = clamp(targetPosition.x, bounds.minX, bounds.width)
+        targetPosition.y = clamp(targetPosition.y, bounds.minY, bounds.height)
+        cameraTransform.position = targetPosition
+        camera.components += cameraTransform
     }
 }
