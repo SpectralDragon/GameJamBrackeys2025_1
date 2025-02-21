@@ -28,15 +28,7 @@ class GameScene: Scene {
         
         self.debugOptions = [.showPhysicsShapes]
         self.debugPhysicsColor = .red
-        
-        var playerPhysicsBody = PhysicsBody2DComponent(shapes: [
-            .generateBox()
-        ], mass: 1, mode: .dynamic)
-        
-        playerPhysicsBody.fixedRotation = true
-        playerPhysicsBody.filter.categoryBitMask = .player
-        playerPhysicsBody.filter.collisionBitMask = [.obstacles, .enemies]
-        
+
         self.addEntity(
             Entity(name: "Player") {
                 SpriteComponent(texture: characters[0, 0])
@@ -44,7 +36,19 @@ class GameScene: Scene {
                 PlayerComponent()
                 CameraFollowing()
                 PlayerImpulseArrow()
-                playerPhysicsBody
+                
+                PhysicsBody2DComponent(
+                    shapes: [.generateBox()],
+                    mass: 1,
+                    mode: .dynamic
+                )
+                .setFixedRotation(true)
+                .setFilter(
+                    CollisionFilter(
+                        categoryBitMask: .player,
+                        collisionBitMask : [.obstacles, .enemies]
+                    )
+                )
             }
         )
         
