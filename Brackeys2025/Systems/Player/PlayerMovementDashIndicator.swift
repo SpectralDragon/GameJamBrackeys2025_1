@@ -8,7 +8,7 @@
 import AdaEngine
 
 @Component
-struct DashIndicator { }
+struct DashRenderIndicator { }
 
 struct PlayerMovementDashIndicator: System {
     
@@ -21,7 +21,7 @@ struct PlayerMovementDashIndicator: System {
     )
     
     static let dashIndicator = EntityQuery(
-        where: .has(DashIndicator.self) && .has(Transform.self)
+        where: .has(DashRenderIndicator.self) && .has(Transform.self)
     )
     
     init(scene: AdaEngine.Scene) { }

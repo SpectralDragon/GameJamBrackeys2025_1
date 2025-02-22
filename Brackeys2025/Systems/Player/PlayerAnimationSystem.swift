@@ -23,48 +23,45 @@ struct PlayerAnimationSystem: System {
             return
         }
         
-        var (playerComponent, spriteAnimation, spriteComponent) = player.components[
-            PlayerComponent.self, SpriteAnimation.self, SpriteComponent.self
+        var (playerComponent, spriteAnimation) = player.components[
+            PlayerComponent.self, SpriteAnimation.self
         ]
         
         updateAnimation(
             &spriteAnimation,
-            &spriteComponent,
             playerComponent
         )
         
         player.components += spriteAnimation
-        player.components += spriteComponent
-        
-        var transform = player.components[Transform.self]!
-        
-        player.components[Transform.self] = transform
     }
 }
 
 private extension PlayerAnimationSystem {
     private func updateAnimation(
         _ spriteAnimation: inout SpriteAnimation,
-        _ spriteComponent: inout SpriteComponent,
         _ playerComponent: PlayerComponent
     ) {
-        var flipX = false
+        var isLeft = false
         
-        if playerComponent.direction.x < 0 {
-            flipX = true
+        let direction = playerComponent.direction
+        
+        if direction.x < 0 {
+            isLeft = true
         }
         
-        var animation: PlayerAnimationState = .idle
+        var animation: PlayerAnimationState = .idleGroundRight
         
-        if playerComponent.direction.y > 0 {
+        if direction.y > 0.3 {
             if abs(playerComponent.direction.x) < 0.5 {
                 animation = .flightUp
             } else {
-                animation = .flightDiagonal
+                animation = isLeft ? .flightLeftDiagonal : .flightRightDiagonal
             }
+        } else if direction.y < 0 {
+            animation = .flightDown
+        } else if direction.y == 0 {
+            animation = isLeft ? .flightLeft : .flightRight
         }
-        
-        print(playerComponent.direction, flipX, animation.rawValue)
         
         spriteAnimation.currentAnimation = animation.rawValue
     }

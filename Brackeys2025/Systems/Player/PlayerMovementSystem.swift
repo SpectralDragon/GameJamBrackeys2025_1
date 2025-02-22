@@ -27,6 +27,10 @@ struct PlayerMovementSystem: System {
         where: .has(DashIndicator.self)
     )
     
+    static let dashRenderIndicator = EntityQuery(
+        where: .has(DashRenderIndicator.self)
+    )
+    
     private let forceMultiplier: Float = 2
     private let forceRestriction: Float = 120
     
@@ -43,6 +47,13 @@ struct PlayerMovementSystem: System {
         #endif
         
         context.scene.performQuery(Self.player).forEach { player in
+            
+            let dashIndicatorEntity = context.scene.performQuery(Self.dashIndicator).first
+            guard var dashIndicator = dashIndicatorEntity?.components[DashIndicator.self] else {
+                print("No DashIndicator")
+                return
+            }
+            
             var (playerComponent, physicsBody, impulseArrow) = player.components[
                 PlayerComponent.self,
                 PhysicsBody2DComponent.self,
@@ -54,7 +65,7 @@ struct PlayerMovementSystem: System {
             playerComponent.direction = physicsBody.linearVelocity
             player.components += playerComponent
             
-            guard playerComponent.dashCount > 0 else {
+            guard dashIndicator.currentDashCount > 0 else {
                 return
             }
             
@@ -89,8 +100,9 @@ struct PlayerMovementSystem: System {
                         wake: true
                     )
                     impulseArrow.startPosition = nil
-                    
+                    dashIndicator.useDash()
                     self.dispawnDashIndicator(context: context)
+                    dashIndicatorEntity?.components += dashIndicator
                 }
             }
             
@@ -131,17 +143,17 @@ private extension PlayerMovementSystem {
     
     @MainActor
     private func spawnDashIndicator(at position: Vector2, context: UpdateContext) {
-        let entity = Entity(name: "DashIndicator") {
+        let entity = Entity(name: "DashRenderIndicator") {
             Transform(rotation: .identity, scale: [2, 0.5, 1], position: [position.x, position.y, 0])
             SpriteComponent(tintColor: .red)
-            DashIndicator()
+            DashRenderIndicator()
         }
         
         context.scene.addEntity(entity)
     }
     
     private func dispawnDashIndicator(context: UpdateContext) {
-        context.scene.performQuery(Self.dashIndicator).forEach {
+        context.scene.performQuery(Self.dashRenderIndicator).forEach {
             context.scene.removeEntity($0)
         }
     }
