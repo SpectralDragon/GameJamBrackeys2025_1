@@ -7,20 +7,67 @@
 
 import AdaEngine
 
+@Component
+struct TargetSpawnSystemSettings {
+    let targetTexture: Texture2D
+    var maxTargets: Int
+    
+    var isEnabled: Bool
+}
+
 struct TargetSpawnSystem: System {
+    
+    static let spawnSettings = EntityQuery(where: .has(TargetSpawnSystemSettings.self))
+    static var targets = EntityQuery(where: .has(TargetComponent.self))
     
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        guard let spawnerEntity = context.scene.performQuery(Self.spawnSettings).first else {
+            return
+        }
         
+        guard
+            let spawnerSettings = spawnerEntity.components[TargetSpawnSystemSettings.self],
+                spawnerSettings.isEnabled
+        else {
+            return
+        }
+        
+        let targetsCount = context.scene.performQuery(Self.targets).count
+        if targetsCount < spawnerSettings.maxTargets {
+            spawnTarget(
+                in: context.scene,
+                settings: spawnerSettings,
+                parent: spawnerEntity
+            )
+        }
     }
 }
 
 private extension TargetSpawnSystem {
     @MainActor
-    func spawnTarget(in scene: Scene) {
+    func spawnTarget(
+        in scene: Scene,
+        settings: TargetSpawnSystemSettings,
+        parent: Entity
+    ) {
+        let isLeft = Bool.random()
+        let isBottom = Bool.random()
         let targetEntity = Entity(name: "Target") {
+            SpriteComponent(texture: settings.targetTexture)
+            Transform(position: [
+                Float.random(in: isLeft ? -15 ..< 10 : 10 ..< 15),
+                Float.random(in: isBottom ? -15 ..< -5 : 15 ..< 20),
+                0
+            ])
             
+            Collision2DComponent(
+                shapes: [.generateBox()],
+                mode: .trigger
+            )
+            
+            TargetComponent()
         }
         
         scene.addEntity(targetEntity)

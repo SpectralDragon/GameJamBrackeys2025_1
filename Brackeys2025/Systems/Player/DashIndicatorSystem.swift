@@ -77,7 +77,6 @@ private extension DashIndicatorSystem {
         dashIndicator: DashIndicator,
         parent: Entity
     ) {
-        
         if parent.children.count < dashIndicator.maxDashCount {
             let maxDashCount = -(Float(dashIndicator.maxDashCount) * 0.25) / 2
             
