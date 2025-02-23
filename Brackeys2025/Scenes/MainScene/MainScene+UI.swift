@@ -30,6 +30,7 @@ struct MainView: View {
             case .story:
                 StoryLineView(currentState: $currentStoryLineIndex)
             case .tutorial:
+                Text("Left click and swipe to move a duck")
                 Text("Press [space] to next")
             }
         }
@@ -94,10 +95,10 @@ extension MainScene {
 
 private extension MainScene {
     static let story: [String] = [
-        "Hey little duck. How are you?",
+        "Hey, little duck. How are you?",
         "Today is very sunny, right?",
-        "So, I want to tell you, that on the other side of river I hear burks",
-        "I think, this place isn't safe anymore.",
+        "So, I want to tell you that, on the other side of the river, I hear barks.",
+        "I think this place isn't safe anymore.",
         "Be careful."
     ]
 }
