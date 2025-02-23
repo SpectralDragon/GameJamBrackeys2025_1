@@ -64,23 +64,23 @@ extension GameScene {
                     BonusItem(
                         type: .cooldownReduced,
                         permanent: true,
-                        texture: miscAtlas[0, 0]
+                        texture: miscAtlas[3, 0]
                     ),
                     BonusItem(
                         type: .addDash,
                         permanent: true,
-                        texture: miscAtlas[0, 0]
+                        texture: miscAtlas[4, 0]
                     ),
-                    BonusItem(
-                        type: .infiniteDash,
-                        permanent: true,
-                        texture: characters[1, 1]
-                    ),
-                    BonusItem(
-                        type: .slowMode,
-                        permanent: true,
-                        texture: characters[0, 0]
-                    )
+//                    BonusItem(
+//                        type: .infiniteDash,
+//                        permanent: true,
+//                        texture: characters[1, 1]
+//                    ),
+//                    BonusItem(
+//                        type: .slowMode,
+//                        permanent: true,
+//                        texture: characters[0, 0]
+//                    )
                 ]
             )
         }

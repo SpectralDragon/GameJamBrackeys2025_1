@@ -74,6 +74,9 @@ extension GameScene {
             dashIndicatorEntity.components += dashIndicator
         }
         
+        playerEntity.playAudio(self.powerupSound)
+        
+        
         switch bonus.type {
         case .cooldownReduced:
             dashIndicator.dashCooldown = max(0.7, dashIndicator.dashCooldown - 0.2)

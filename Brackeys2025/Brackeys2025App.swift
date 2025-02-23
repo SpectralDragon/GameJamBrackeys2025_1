@@ -14,5 +14,6 @@ struct Brackeys2025App: App {
             MainScene()
         }
         .windowMode(.windowed)
+        .windowTitle("Holy Duck")
     }
 }

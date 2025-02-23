@@ -152,7 +152,7 @@ private extension GameScene {
         self.jumpSound = try await ResourceManager.load("jump.wav", from: .main) as AudioResource
         self.powerupSound = try await ResourceManager.load("powerup.wav", from: .main) as AudioResource
         self.shootSound = try await ResourceManager.load("shoot.wav", from: .main) as AudioResource
-        self.diedSound = try await ResourceManager.load("died.wav", from: .main) as AudioResource
+        self.diedSound = try await ResourceManager.load("gameover.wav", from: .main) as AudioResource
     }
     
     @MainActor
@@ -223,4 +223,5 @@ struct Game {
     static var state: GameState = .idle
     
     static var cameraBackgroundColor = Color(41/255, 173/255, 255/255, 1)
+    static var groundColor = Color(184/255, 111/255, 80/255, 1)
 }

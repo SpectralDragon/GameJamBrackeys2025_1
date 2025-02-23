@@ -164,6 +164,7 @@ extension GameScene {
         }
         
         player.prepareAudio(self.jumpSound)
+            .setVolume(0.3)
         
         player.addChild(indicator)
         self.addEntity(player)

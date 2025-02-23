@@ -9,26 +9,11 @@ import AdaEngine
 
 extension GameScene {
     func setupLevel() {
-        self.addEntity(
-            Entity(name: "Grass") {
-                SpriteComponent(tintColor: .green)
-                Transform(rotation: .identity, scale: [30, 1, 1], position: [0, -7, 0])
-                Collision2DComponent(
-                    shapes: [
-                        .generateBox()
-                    ],
-                    mode: .default,
-                    filter: CollisionFilter(
-                        categoryBitMask: .obstacles,
-                        collisionBitMask: .player
-                    )
-                )
-            }
-        )
+        self.generateGrass()
         
         self.addEntity(
             Entity(name: "Terrain") {
-                SpriteComponent(tintColor: .brown)
+                SpriteComponent(tintColor: Game.groundColor)
                 Transform(rotation: .identity, scale: [30, 6, 1], position: [0, -10.5, 0])
                 Collision2DComponent(
                     shapes: [
@@ -66,7 +51,7 @@ extension GameScene {
 //                )
 //            }
 //        )
-//        
+//
         self.clouds()
         self.borders()
     }
@@ -86,7 +71,9 @@ extension GameScene {
                         ]
                     )
                     
-                    SpriteComponent()
+                    SpriteComponent(
+                        texture: miscAtlas[2, 4]
+                    )
                 }
             )
         }
@@ -161,6 +148,30 @@ extension GameScene {
                 Transform(rotation: .identity, scale: [30, 6, 1], position: [0, -10.5, 0])
             }
         )
+    }
+    
+    private func generateGrass() {
+        var position: Float = -12
+        for index in 0..<10 {
+            self.addEntity(
+                Entity(name: "Grass \(index)") {
+                    SpriteComponent(
+                        texture: miscAtlas[Int.random(in: 0...1), 4]
+                    )
+                    Transform(
+                        rotation: .identity,
+                        scale: [3, 2, 1],
+                        position: [position, -6.5, 0]
+                    )
+                }
+            )
+            
+            position += 3
+        }
+    }
+    
+    private func generateTerrain() {
+        
     }
 }
 

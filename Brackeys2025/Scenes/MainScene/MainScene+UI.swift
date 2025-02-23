@@ -33,6 +33,7 @@ struct MainView: View {
                 Text("Press [space] to next")
             }
         }
+        .offset(x: 0, y: -200)
         .font(self.font)
         .padding(.all, 16)
         .onEvent(EngineEvents.GameLoopBegan.self) { event in
