@@ -106,7 +106,8 @@ struct YouDiedView: View {
         .onEvent(EngineEvents.GameLoopBegan.self) { event in
             // FIXME: Hah
             if Input.isKeyPressed(.space) {
-                self.scene?.sceneManager?.presentScene(GameScene())
+                self.scene?.value?.clearAllEntities()
+                self.scene?.value?.sceneManager?.presentScene(GameScene())
             }
         }
     }

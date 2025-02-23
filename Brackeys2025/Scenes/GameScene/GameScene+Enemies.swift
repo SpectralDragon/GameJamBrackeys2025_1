@@ -12,6 +12,7 @@ extension GameScene {
         let targetSpawnerEntity = Entity(name: "TargetSpawner") {
             TargetSpawnSystemSettings(
                 targetTexture: miscAtlas[1, 0],
+                shootSound: self.shootSound,
                 maxTargets: 1,
                 isEnabled: true
             )

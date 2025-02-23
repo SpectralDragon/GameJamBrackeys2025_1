@@ -101,6 +101,9 @@ struct PlayerMovementSystem: System {
                         point: .zero,
                         wake: true
                     )
+                    
+                    player.playAudio(playerComponent.jumpSound)
+                    
                     impulseArrow.startPosition = nil
                     dashIndicator.useDash()
                     self.dispawnDashIndicator(context: context)

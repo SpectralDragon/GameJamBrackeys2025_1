@@ -13,10 +13,13 @@ class GameScene: Scene {
     private(set) var miscAtlas: TextureAtlas!
     private(set) var font: Font!
     
+    private(set) var jumpSound: AudioResource!
+    private(set) var powerupSound: AudioResource!
+    private(set) var shootSound: AudioResource!
+    private(set) var diedSound: AudioResource!
+    
     weak var gameMaster: Entity?
     weak var shootEntity: Entity?
-    
-    private var backgroundColor = Color(41/255, 173/255, 255/255, 1)
     
     private var disposeBag: Set<AnyCancellable> = []
     
@@ -27,7 +30,7 @@ class GameScene: Scene {
     override func sceneDidMove(to view: SceneView) {
         let camera = OrthographicCamera()
         camera.camera.orthographicScale = 7
-        camera.camera.backgroundColor = self.backgroundColor
+        camera.camera.backgroundColor = Game.cameraBackgroundColor
         self.addEntity(camera)
         
         Game.isPaused = false
@@ -64,13 +67,13 @@ class GameScene: Scene {
         }
         .store(in: &disposeBag)
         
-        self.subscribe(to: GameEvents.OnShoot.self) { _ in
-            self.shootEffect()
+        self.subscribe(to: GameEvents.OnShoot.self) { [weak self] _ in
+            self?.shootEffect()
         }
         .store(in: &disposeBag)
         
-        self.subscribe(to: CollisionEvents.Began.self) { event in
-            self.onCollisionBegan(event.entityA, event.entityB)
+        self.subscribe(to: CollisionEvents.Began.self) { [weak self] event in
+            self?.onCollisionBegan(event.entityA, event.entityB)
         }
         .store(in: &disposeBag)
     }
@@ -86,6 +89,10 @@ class GameScene: Scene {
             statistics: statistics
         )
         
+        let diedEntity = Entity(name: "Died Sound")
+        diedEntity.playAudio(self.diedSound)
+        self.addEntity(diedEntity)
+        
         self.eventManager.send(
             GameEvents.OnStateChange(
                 state: .gameOver(gameOver)
@@ -93,6 +100,13 @@ class GameScene: Scene {
         )
         
         Game.isPaused = true
+        self.disposeBag.removeAll()
+    }
+    
+    deinit {
+        #if DEBUG
+        print("Deinited GameScene")
+        #endif
     }
 }
 
@@ -130,6 +144,11 @@ private extension GameScene {
         
         let fontRes = try await ResourceManager.load("PixelSmall.ttf", from: .main) as AdaEngine.FontResource
         self.font = Font(fontResource: fontRes, pointSize: 32)
+        
+        self.jumpSound = try await ResourceManager.load("jump.wav", from: .main) as AudioResource
+        self.powerupSound = try await ResourceManager.load("powerup.wav", from: .main) as AudioResource
+        self.shootSound = try await ResourceManager.load("shoot.wav", from: .main) as AudioResource
+        self.diedSound = try await ResourceManager.load("died.wav", from: .main) as AudioResource
     }
     
     @MainActor
@@ -154,7 +173,7 @@ private extension GameScene {
         
         let entity = Entity(name: "Shoot Effect") {
             ShootEffect(
-                cameraBackground: self.backgroundColor
+                cameraBackground: Game.cameraBackgroundColor
             )
         }
         self.shootEntity = entity
@@ -198,4 +217,6 @@ struct Statistics {
 struct Game {
     static var isPaused = false
     static var state: GameState = .idle
+    
+    static var cameraBackgroundColor = Color(41/255, 173/255, 255/255, 1)
 }

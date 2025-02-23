@@ -11,12 +11,20 @@ struct TargetShootSystem: System {
     
     static var player = EntityQuery(where: .has(PlayerComponent.self) && .has(Transform.self))
     static var targets = EntityQuery(where: .has(TargetComponent.self))
+    static var targetSettings = EntityQuery(where: .has(TargetSpawnSystemSettings.self))
     static var statistics = EntityQuery(where: .has(Statistics.self))
     
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
         if Game.isPaused { return }
+        
+        guard
+            let targetSettingsEntity = context.scene.performQuery(Self.targetSettings).first,
+            let targetSettings = targetSettingsEntity.components[TargetSpawnSystemSettings.self]
+        else {
+            return
+        }
         
         guard
             let statisticsEntity = context.scene.performQuery(Self.statistics).first,
@@ -36,7 +44,8 @@ struct TargetShootSystem: System {
             spawnBullet(
                 in: context.scene,
                 direction: transform.position,
-                target: target
+                target: target,
+                targetSettings: targetSettings
             )
             statistics.bulletFired += 1
             entity.removeFromScene()
@@ -49,43 +58,47 @@ private extension TargetShootSystem {
     func spawnBullet(
         in scene: Scene,
         direction: Vector3,
-        target: TargetComponent
+        target: TargetComponent,
+        targetSettings: TargetSpawnSystemSettings
     ) {
-        scene.addEntity(
-            Entity(name: "Bullet!") {
-                Transform(
-                    scale: [0.3, 0.3, 0.3],
-                    position: target.spawnTargetPosition
+        let bullet = Entity(name: "Bullet!") {
+            Transform(
+                scale: [0.3, 0.3, 0.3],
+                position: target.spawnTargetPosition
+            )
+            SpriteComponent(tintColor: .orange)
+            PhysicsBody2DComponent(shapes: [
+                .generateBox()
+            ])
+            .setFilter(
+                CollisionFilter(
+                    categoryBitMask: .enemies,
+                    collisionBitMask: .player
                 )
-                SpriteComponent(tintColor: .orange)
-                PhysicsBody2DComponent(shapes: [
-                    .generateBox()
-                ])
-                .setFilter(
-                    CollisionFilter(
-                        categoryBitMask: .enemies,
-                        collisionBitMask: .player
-                    )
+            )
+            .setGravityScale(0.0)
+            .setMode(.kinematic)
+            
+            Collision2DComponent(
+                shapes: [.generateBox()],
+                mode: .trigger
+            )
+            .setFilter(
+                CollisionFilter(
+                    categoryBitMask: .enemies,
+                    collisionBitMask: .player
                 )
-                .setGravityScale(0.0)
-                .setMode(.kinematic)
-                
-                Collision2DComponent(
-                    shapes: [.generateBox()],
-                    mode: .trigger
-                )
-                .setFilter(
-                    CollisionFilter(
-                        categoryBitMask: .enemies,
-                        collisionBitMask: .player
-                    )
-                )
-                
-                Bullet(
-                    direction: direction
-                )
-            }
-        )
+            )
+            
+            Bullet(
+                direction: direction
+            )
+        }
+        
+        bullet.prepareAudio(targetSettings.shootSound)
+            .play()
+        
+        scene.addEntity(bullet)
         
         scene.eventManager.send(GameEvents.OnShoot())
     }

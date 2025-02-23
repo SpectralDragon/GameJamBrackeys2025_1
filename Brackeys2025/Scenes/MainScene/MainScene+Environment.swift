@@ -1,30 +1,51 @@
 //
-//  GameScene+Player.swift
+//  MainScene+Environment.swift
 //  Brackeys2025
 //
-//  Created by Vladislav Prusakov on 22.02.2025.
+//  Created by Vladislav Prusakov on 23.02.2025.
 //
 
 import AdaEngine
 
-@Component
-struct PlayerComponent {
-    var direction: Vector2 = .zero
-    var jumpSound: AudioResource
-}
-
-enum PlayerAnimationState: String {
-    case idleGroundRight, idleGroundLeft
-    case walkingRight, walkingLeft
-    case flightLeftDiagonal, flightRightDiagonal
+extension MainScene {
+    func setupEnvironment() {
+        self.createPlayer()
+        
+        self.addEntity(
+            Entity(name: "Grass") {
+                SpriteComponent(tintColor: .green)
+                Transform(rotation: .identity, scale: [30, 1, 1], position: [0, 0.5, 0])
+                Collision2DComponent(
+                    shapes: [
+                        .generateBox()
+                    ],
+                    mode: .default,
+                    filter: CollisionFilter(
+                        categoryBitMask: .obstacles,
+                        collisionBitMask: .player
+                    )
+                )
+            }
+        )
+        
+        self.addEntity(
+            Entity(name: "Terrain") {
+                SpriteComponent(tintColor: .brown)
+                Transform(rotation: .identity, scale: [30, 6, 1], position: [0, -2.5, 0])
+                Collision2DComponent(
+                    shapes: [
+                        .generateBox()
+                    ],
+                    mode: .default,
+                    filter: CollisionFilter(
+                        categoryBitMask: .obstacles,
+                        collisionBitMask: .player
+                    )
+                )
+            }
+        )
+    }
     
-    case flightLeft, flightRight
-    case flightUp, flightDown
-    
-    case dash
-}
-
-extension GameScene {
     func createPlayer() {
         func createAnimationTexture(
             textures: [Texture2D]
@@ -127,46 +148,15 @@ extension GameScene {
             return animations
         }
         
-        let indicator = Entity(name: "DashIndicator") {
-            DashIndicator(
-                maxDashCount: 4,
-                dashCooldown: 1.5,
-                dashTexture: miscAtlas[0, 0]
-            )
-            NoFrustumCulling()
-            Transform(scale: [1, 1, 1], position: [0, 0.7, 0])
-        }
-        
         let player = Entity(name: "Player") {
             SpriteComponent()
-            Transform()
-            PlayerComponent(jumpSound: self.jumpSound)
-            CameraFollowing()
-            PlayerImpulseArrow()
+            Transform(position: [0, -0.5, 1])
             
             SpriteAnimation(
                 animations: createAnimations(),
                 currentAnimation: PlayerAnimationState.idleGroundRight.rawValue
             )
-            
-            PhysicsBody2DComponent(
-                shapes: [.generateBox()],
-                mass: 1,
-                mode: .dynamic
-            )
-            .setFixedRotation(true)
-            .setFilter(
-                CollisionFilter(
-                    categoryBitMask: .player,
-                    collisionBitMask : .all
-                )
-            )
         }
-        
-        player.prepareAudio(self.jumpSound)
-        
-        player.addChild(indicator)
         self.addEntity(player)
-        self.addEntity(indicator)
     }
 }

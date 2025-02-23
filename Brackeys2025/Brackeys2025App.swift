@@ -11,7 +11,7 @@ import AdaEngine
 struct Brackeys2025App: App {
     var scene: some AppScene {
         GameAppScene {
-            GameScene()
+            MainScene()
         }
         .windowMode(.windowed)
     }

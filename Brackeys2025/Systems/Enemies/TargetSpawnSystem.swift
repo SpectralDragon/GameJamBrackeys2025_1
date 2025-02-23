@@ -10,6 +10,7 @@ import AdaEngine
 @Component
 struct TargetSpawnSystemSettings {
     let targetTexture: Texture2D
+    let shootSound: AudioResource
     var maxTargets: Int
     
     var isEnabled: Bool
