@@ -59,26 +59,26 @@ extension GameScene {
             
             ItemSpawnSettingsComponent(
                 items: [
-//                    BonusItem(
-//                        type: .cooldownReduced,
-//                        permanent: true,
-//                        texture: miscAtlas[0, 0]
-//                    ),
+                    BonusItem(
+                        type: .cooldownReduced,
+                        permanent: true,
+                        texture: miscAtlas[0, 0]
+                    ),
                     BonusItem(
                         type: .addDash,
                         permanent: true,
                         texture: miscAtlas[0, 0]
                     ),
-//                    BonusItem(
-//                        type: .infiniteDash,
-//                        permanent: true,
-//                        texture: characters[1, 1]
-//                    ),
-//                    BonusItem(
-//                        type: .slowMode,
-//                        permanent: true,
-//                        texture: characters[0, 0]
-//                    )
+                    BonusItem(
+                        type: .infiniteDash,
+                        permanent: true,
+                        texture: characters[1, 1]
+                    ),
+                    BonusItem(
+                        type: .slowMode,
+                        permanent: true,
+                        texture: characters[0, 0]
+                    )
                 ]
             )
         }

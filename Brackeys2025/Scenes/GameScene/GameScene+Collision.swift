@@ -25,6 +25,10 @@ extension GameScene {
         if entityB.components.has(PlayerComponent.self) && entityA.components.has(BonusItem.self) {
             self.onBonusItemCollide(entityB, entityA)
         }
+        
+        if entityB.components.has(PlayerComponent.self) && entityA.components.has(BorderComponent.self) {
+            self.onBorderCollide(entityB, entityA)
+        }
     }
     
     private func onTriggerCollide(
@@ -43,24 +47,9 @@ extension GameScene {
     private func onBulletCollide(
         _ playerEntity: Entity,
         _ targetEntity: Entity
-    ) {
-        guard let gameMaster else {
-            return
-        }
-        
-        let (difficulty, statistics) = gameMaster.components[DifficultyComponent.self, Statistics.self]
-        let gameOver = GameOver(
-            totalTime: difficulty.currentTimer,
-            statistics: statistics
-        )
-        
-        self.eventManager.send(
-            GameEvents.OnStateChange(
-                state: .gameOver(gameOver)
-            )
-        )
-        
-        Game.isPaused = true
+    ) { 
+        playerEntity.components[PhysicsBody2DComponent.self]?.clearForces()
+        self.gameOver()
     }
     
     private func onBonusItemCollide(
@@ -87,7 +76,7 @@ extension GameScene {
         
         switch bonus.type {
         case .cooldownReduced:
-            dashIndicator.dashCooldown -= 0.2
+            dashIndicator.dashCooldown = max(0.7, dashIndicator.dashCooldown - 0.2)
             return
         case .addDash:
             dashIndicator.maxDashCount += 1
@@ -99,5 +88,17 @@ extension GameScene {
         case .slowMode:
             return
         }
+    }
+    
+    private func onBorderCollide(
+        _ playerEntity: Entity,
+        _ borderEntity: Entity
+    ) {
+        if borderEntity.components.has(DeathComponent.self) {
+            self.gameOver()
+            return
+        }
+        
+        playerEntity.components[PhysicsBody2DComponent.self]?.clearForces()
     }
 }

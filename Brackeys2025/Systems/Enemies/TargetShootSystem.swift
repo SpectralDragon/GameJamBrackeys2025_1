@@ -86,5 +86,7 @@ private extension TargetShootSystem {
                 )
             }
         )
+        
+        scene.eventManager.send(GameEvents.OnShoot())
     }
 }

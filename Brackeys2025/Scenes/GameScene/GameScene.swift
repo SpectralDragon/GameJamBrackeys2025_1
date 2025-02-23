@@ -7,9 +7,6 @@
 
 import AdaEngine
 
-// TODO: Add borders that will bounce or disable movemnt
-// TODO: Add background and clouds
-
 class GameScene: Scene {
     
     private(set) var characters: TextureAtlas!
@@ -17,25 +14,27 @@ class GameScene: Scene {
     private(set) var font: Font!
     
     weak var gameMaster: Entity?
+    weak var shootEntity: Entity?
+    
+    private var backgroundColor = Color(41/255, 173/255, 255/255, 1)
     
     private var disposeBag: Set<AnyCancellable> = []
     
     override func sceneDidLoad() {
-//        self.physicsWorld2D?.gravity = [0, -0.3]
-        self.physicsWorld2D?.gravity = [0, 0]
+        self.physicsWorld2D?.gravity = [0, -0.3]
     }
     
     override func sceneDidMove(to view: SceneView) {
         let camera = OrthographicCamera()
         camera.camera.orthographicScale = 7
-        camera.camera.backgroundColor = Color(41/255, 173/255, 255/255, 1)
+        camera.camera.backgroundColor = self.backgroundColor
         self.addEntity(camera)
         
         Game.isPaused = false
         
         #if DEBUG
-        self.debugOptions = [.showPhysicsShapes]
-        self.debugPhysicsColor = .red
+//        self.debugOptions = [.showPhysicsShapes]
+//        self.debugPhysicsColor = .red
         #endif
         
         Task { @MainActor in
@@ -65,10 +64,35 @@ class GameScene: Scene {
         }
         .store(in: &disposeBag)
         
+        self.subscribe(to: GameEvents.OnShoot.self) { _ in
+            self.shootEffect()
+        }
+        .store(in: &disposeBag)
+        
         self.subscribe(to: CollisionEvents.Began.self) { event in
             self.onCollisionBegan(event.entityA, event.entityB)
         }
         .store(in: &disposeBag)
+    }
+    
+    func gameOver() {
+        guard let gameMaster else {
+            return
+        }
+        
+        let (difficulty, statistics) = gameMaster.components[DifficultyComponent.self, Statistics.self]
+        let gameOver = GameOver(
+            totalTime: difficulty.currentTimer,
+            statistics: statistics
+        )
+        
+        self.eventManager.send(
+            GameEvents.OnStateChange(
+                state: .gameOver(gameOver)
+            )
+        )
+        
+        Game.isPaused = true
     }
 }
 
@@ -87,7 +111,9 @@ private extension GameScene {
             TargetShootSystem.self,
             BulletSystem.self,
             DifficultySystem.self,
-            ItemSpawnerSystem.self
+            ItemSpawnerSystem.self,
+            ItemMovementSystem.self,
+            ShootEffectSystem.self
         ]
     }
 }
@@ -110,13 +136,29 @@ private extension GameScene {
     func setupScene() async throws {
         try await preloadAssets()
         self.createPlayer()
-//        self.setupLevel()
+        self.setupLevel()
         self.setupEnemies()
         self.setupUI()
         self.setupGameMaster()
         
         // TODO: FIXME
         self.eventManager.send(GameEvents.OnStateChange(state: .playing))
+    }
+}
+
+private extension GameScene {
+    func shootEffect() {
+        if let shootEntity, shootEntity.isActive {
+            return
+        }
+        
+        let entity = Entity(name: "Shoot Effect") {
+            ShootEffect(
+                cameraBackground: self.backgroundColor
+            )
+        }
+        self.shootEntity = entity
+        self.addEntity(entity)
     }
 }
 
@@ -138,6 +180,8 @@ enum GameEvents {
     struct OnStateChange: Event {
         let state: GameState
     }
+    
+    struct OnShoot: Event {}
 }
 
 struct GameOver {
