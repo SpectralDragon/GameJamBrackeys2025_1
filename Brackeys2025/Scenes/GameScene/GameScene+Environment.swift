@@ -43,6 +43,13 @@ extension GameScene {
             }
         )
         
+        self.addEntity(
+            Entity(name: "Duck Hunt Logo") {
+                SpriteComponent(texture: self.logo)
+                Transform(rotation: .identity, scale: [14, 12, 12], position: [0, 12.5, -0])
+            }
+        )
+        
 //        self.addEntity(
 //            Entity(name: "Grass Layer 1") {
 //                SpriteComponent(tintColor: Color.gray)

@@ -46,7 +46,7 @@ struct ItemSpawnerSystem: System {
         
         guard
             let difficultyEntity = context.scene.performQuery(Self.difficulty).first,
-            var difficulty = difficultyEntity.components[DifficultyComponent.self]
+            let difficulty = difficultyEntity.components[DifficultyComponent.self]
         else {
             return
         }
@@ -68,7 +68,7 @@ struct ItemSpawnerSystem: System {
         if spawnSettings.nextItem == nil {
             let itemType = difficulty.currentLevel.availableItems.randomElement()
             spawnSettings.nextItem = spawnSettings.items.first(where: { $0.type == itemType })
-            spawnSettings.nextItemCooldown = .random(in: 5..<13)
+            spawnSettings.nextItemCooldown = .random(in: 13..<25)
         }
         
         guard let nextItem = spawnSettings.nextItem else {

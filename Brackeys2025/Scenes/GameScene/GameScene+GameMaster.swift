@@ -17,10 +17,12 @@ extension GameScene {
                         maxTargets: 1,
                         targetSpeed: 0.6,
                         bulletSpeed: 0.5,
-                        availableItems: [ ]
+                        availableItems: [
+                            .addDash
+                        ]
                     ),
                     DifficultyLevel(
-                        time: .random(in: 15..<35),
+                        time: .random(in: 35..<55),
                         maxTargets: 2,
                         targetSpeed: 0.8,
                         bulletSpeed: 0.8,
@@ -30,7 +32,7 @@ extension GameScene {
                         ]
                     ),
                     DifficultyLevel(
-                        time: .random(in: 50..<75),
+                        time: .random(in: 70..<95),
                         maxTargets: 4,
                         targetSpeed: 1,
                         bulletSpeed: 1,
@@ -41,7 +43,7 @@ extension GameScene {
                         ]
                     ),
                     DifficultyLevel(
-                        time: .random(in: 50..<75),
+                        time: .random(in: 100..<125),
                         maxTargets: 6,
                         targetSpeed: 1.3,
                         bulletSpeed: 1.3,

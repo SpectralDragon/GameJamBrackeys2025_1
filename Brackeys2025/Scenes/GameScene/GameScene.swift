@@ -11,6 +11,7 @@ class GameScene: Scene {
     
     private(set) var characters: TextureAtlas!
     private(set) var miscAtlas: TextureAtlas!
+    private(set) var logo: Texture2D!
     private(set) var font: Font!
     
     private(set) var jumpSound: AudioResource!
@@ -141,6 +142,9 @@ private extension GameScene {
         
         let miscImage = try await ResourceManager.load("misc.png", from: .main) as AdaEngine.Image
         self.miscAtlas = TextureAtlas(from: miscImage, size: SizeInt(width: 16, height: 16))
+        
+        let logoImage = try await ResourceManager.load("duck_hunt_logo.png", from: .main) as AdaEngine.Image
+        self.logo = Texture2D(image: logoImage)
         
         let fontRes = try await ResourceManager.load("PixelSmall.ttf", from: .main) as AdaEngine.FontResource
         self.font = Font(fontResource: fontRes, pointSize: 32)
