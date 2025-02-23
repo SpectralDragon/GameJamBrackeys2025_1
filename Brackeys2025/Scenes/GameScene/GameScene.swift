@@ -7,11 +7,16 @@
 
 import AdaEngine
 
+// TODO: Add borders that will bounce or disable movemnt
+// TODO: Add background and clouds
+
 class GameScene: Scene {
     
     private(set) var characters: TextureAtlas!
     private(set) var miscAtlas: TextureAtlas!
     private(set) var font: Font!
+    
+    weak var gameMaster: Entity?
     
     private var disposeBag: Set<AnyCancellable> = []
     
@@ -26,8 +31,12 @@ class GameScene: Scene {
         camera.camera.backgroundColor = Color(41/255, 173/255, 255/255, 1)
         self.addEntity(camera)
         
+        Game.isPaused = false
+        
+        #if DEBUG
         self.debugOptions = [.showPhysicsShapes]
         self.debugPhysicsColor = .red
+        #endif
         
         Task { @MainActor in
             do {
@@ -51,8 +60,13 @@ class GameScene: Scene {
             self.addSystem($0)
         }
         
+        self.subscribe(to: GameEvents.OnStateChange.self) { event in
+            Game.state = event.state
+        }
+        .store(in: &disposeBag)
+        
         self.subscribe(to: CollisionEvents.Began.self) { event in
-            print("event", event)
+            self.onCollisionBegan(event.entityA, event.entityB)
         }
         .store(in: &disposeBag)
     }
@@ -69,7 +83,11 @@ private extension GameScene {
             PlayerAnimationSystem.self,
             DashIndicatorSystem.self,
             TargetSpawnSystem.self,
-            TargetMovementSystem.self
+            TargetMovementSystem.self,
+            TargetShootSystem.self,
+            BulletSystem.self,
+            DifficultySystem.self,
+            ItemSpawnerSystem.self
         ]
     }
 }
@@ -92,8 +110,13 @@ private extension GameScene {
     func setupScene() async throws {
         try await preloadAssets()
         self.createPlayer()
-        self.setupLevel()
+//        self.setupLevel()
         self.setupEnemies()
+        self.setupUI()
+        self.setupGameMaster()
+        
+        // TODO: FIXME
+        self.eventManager.send(GameEvents.OnStateChange(state: .playing))
     }
 }
 
@@ -101,4 +124,34 @@ extension CollisionGroup {
     static let player = CollisionGroup(rawValue: 1 << 1)
     static let enemies = CollisionGroup(rawValue: 1 << 2)
     static let obstacles = CollisionGroup(rawValue: 1 << 3)
+    static let targets = CollisionGroup(rawValue: 1 << 4)
+    static let bonusItems = CollisionGroup(rawValue: 1 << 5)
+}
+
+enum GameState {
+    case idle
+    case playing
+    case gameOver(GameOver)
+}
+
+enum GameEvents {
+    struct OnStateChange: Event {
+        let state: GameState
+    }
+}
+
+struct GameOver {
+    let totalTime: TimeInterval
+    let statistics: Statistics
+}
+
+@Component
+struct Statistics {
+    var bulletFired: Int = 0
+    var itemsCollected = 0
+}
+
+struct Game {
+    static var isPaused = false
+    static var state: GameState = .idle
 }

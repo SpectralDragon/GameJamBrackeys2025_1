@@ -157,7 +157,7 @@ extension GameScene {
             .setFilter(
                 CollisionFilter(
                     categoryBitMask: .player,
-                    collisionBitMask : [.obstacles, .enemies]
+                    collisionBitMask : .all
                 )
             )
         }

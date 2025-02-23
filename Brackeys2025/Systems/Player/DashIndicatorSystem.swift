@@ -9,11 +9,17 @@ import AdaEngine
 
 @Component
 struct DashIndicator {
-    var maxDashCount: Int
+    var maxDashCount: Int {
+        didSet {
+            needsRedrawIndicator = true
+        }
+    }
     var currentDashCount: Int
     var dashCooldown: LongTimeInterval = 3.5
     var lastDashUsage: LongTimeInterval = 0
     var dashTexture: Texture2D
+    
+    var needsRedrawIndicator = false
     
     init(
         maxDashCount: Int,
@@ -46,14 +52,20 @@ struct DashIndicatorSystem: System {
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        if Game.isPaused { return }
+        
         context.scene.performQuery(Self.dashIndicator).forEach { entity in
             var dashIndicator = entity.components[DashIndicator.self]!
             
             self.updateDashIndicators(
                 in: context,
-                dashIndicator: dashIndicator,
+                dashIndicator: &dashIndicator,
                 parent: entity
             )
+            
+            defer {
+                entity.components += dashIndicator
+            }
             
             if dashIndicator.maxDashCount == dashIndicator.currentDashCount {
                 return
@@ -65,7 +77,6 @@ struct DashIndicatorSystem: System {
             
             dashIndicator.lastDashUsage = Time.absolute
             dashIndicator.currentDashCount += 1
-            entity.components += dashIndicator
         }
     }
 }
@@ -74,13 +85,20 @@ private extension DashIndicatorSystem {
     @MainActor
     func updateDashIndicators(
         in context: UpdateContext,
-        dashIndicator: DashIndicator,
+        dashIndicator: inout DashIndicator,
         parent: Entity
     ) {
+        if dashIndicator.needsRedrawIndicator {
+            parent.children.forEach {
+                $0.removeFromScene()
+            }
+            dashIndicator.needsRedrawIndicator = false
+        }
+        
         if parent.children.count < dashIndicator.maxDashCount {
             let maxDashCount = -(Float(dashIndicator.maxDashCount) * 0.25) / 2
             
-            (0..<dashIndicator.currentDashCount).forEach { index in
+            (0..<dashIndicator.maxDashCount).forEach { index in
                 let indicator = Entity(name: "DashIndicator \(index)") {
                     Transform(
                         scale: [0.3, 0.3, 0.3],

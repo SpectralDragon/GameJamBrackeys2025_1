@@ -27,6 +27,8 @@ struct PlayerMovementDashIndicator: System {
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        if Game.isPaused { return }
+        
         guard let window = context.scene.window else {
             return
         }

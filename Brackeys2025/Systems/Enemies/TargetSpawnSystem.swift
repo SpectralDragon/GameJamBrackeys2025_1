@@ -23,6 +23,8 @@ struct TargetSpawnSystem: System {
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        if Game.isPaused { return }
+        
         guard let spawnerEntity = context.scene.performQuery(Self.spawnSettings).first else {
             return
         }
@@ -54,20 +56,27 @@ private extension TargetSpawnSystem {
     ) {
         let isLeft = Bool.random()
         let isBottom = Bool.random()
+        
+        let position: Vector3 = [
+            Float.random(in: isLeft ? -15 ..< 10 : 10 ..< 15),
+            Float.random(in: isBottom ? -15 ..< -5 : 15 ..< 20),
+            0
+        ]
+        
         let targetEntity = Entity(name: "Target") {
             SpriteComponent(texture: settings.targetTexture)
-            Transform(position: [
-                Float.random(in: isLeft ? -15 ..< 10 : 10 ..< 15),
-                Float.random(in: isBottom ? -15 ..< -5 : 15 ..< 20),
-                0
-            ])
+            Transform(position: position)
             
             Collision2DComponent(
                 shapes: [.generateBox()],
-                mode: .trigger
+                mode: .trigger,
+                filter: CollisionFilter(
+                    categoryBitMask: .targets,
+                    collisionBitMask: .player
+                )
             )
             
-            TargetComponent()
+            TargetComponent(spawnTargetPosition: position)
         }
         
         scene.addEntity(targetEntity)

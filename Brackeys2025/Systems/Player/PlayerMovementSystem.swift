@@ -37,6 +37,8 @@ struct PlayerMovementSystem: System {
     init(scene: AdaEngine.Scene) { }
     
     func update(context: UpdateContext) {
+        if Game.isPaused { return }
+        
         #if DEBUG
         guard let cameraEntity = context.scene.performQuery(Self.camera).first else {
             assertionFailure("Can't find required camera")

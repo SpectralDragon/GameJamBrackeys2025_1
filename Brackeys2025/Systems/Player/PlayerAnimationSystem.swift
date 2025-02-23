@@ -19,6 +19,8 @@ struct PlayerAnimationSystem: System {
     init(scene: Scene) { }
     
     func update(context: UpdateContext) {
+        if Game.isPaused { return }
+        
         guard let player = context.scene.performQuery(Self.player).first else {
             return
         }
