@@ -11,7 +11,7 @@ import AdaEngine
 struct Brackeys2025App: App {
     var scene: some AppScene {
         GameAppScene {
-            MainScene()
+            LaunchScene()
         }
         .windowMode(.windowed)
         .windowTitle("Holy Duck")
