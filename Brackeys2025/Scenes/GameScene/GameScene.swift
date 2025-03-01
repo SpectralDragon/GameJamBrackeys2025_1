@@ -37,8 +37,7 @@ class GameScene: Scene {
         Game.isPaused = false
         
         #if DEBUG
-//        self.debugOptions = [.showPhysicsShapes]
-//        self.debugPhysicsColor = .red
+        self.debugOptions = [.showPhysicsShapes]
         #endif
         
         Task { @MainActor in

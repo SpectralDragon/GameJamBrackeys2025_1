@@ -12,10 +12,29 @@ extension MainScene {
         self.createPlayer()
         self.generateGrass()
         
+        var position: Float = -10
+        for _ in 0..<30 {
+            self.addEntity(
+                Entity(name: "Terrain") {
+                    SpriteComponent(
+                        texture: miscAtlas[Int.random(in: 3...4), 4]
+                    )
+                    Transform(
+                        rotation: .identity,
+                        scale: [1, 1, 1],
+                        position: [position, 0, 1]
+                    )
+                }
+            )
+            
+            position += 1
+        }
+        
+        
         self.addEntity(
             Entity(name: "Terrain") {
                 SpriteComponent(tintColor: Game.groundColor)
-                Transform(rotation: .identity, scale: [30, 6, 1], position: [0, -2.5, 0])
+                Transform(rotation: .identity, scale: [30, 3, 1], position: [0, -2, 0])
                 Collision2DComponent(
                     shapes: [
                         .generateBox()

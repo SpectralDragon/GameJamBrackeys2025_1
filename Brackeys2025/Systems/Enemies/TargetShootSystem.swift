@@ -67,9 +67,10 @@ private extension TargetShootSystem {
                 position: target.spawnTargetPosition
             )
             SpriteComponent(tintColor: .orange)
-            PhysicsBody2DComponent(shapes: [
-                .generateBox()
-            ])
+            PhysicsBody2DComponent(
+                shapes: [.generateBox()],
+                isTrigger: true
+            )
             .setFilter(
                 CollisionFilter(
                     categoryBitMask: .enemies,
@@ -78,17 +79,6 @@ private extension TargetShootSystem {
             )
             .setGravityScale(0.0)
             .setMode(.kinematic)
-            
-            Collision2DComponent(
-                shapes: [.generateBox()],
-                mode: .trigger
-            )
-            .setFilter(
-                CollisionFilter(
-                    categoryBitMask: .enemies,
-                    collisionBitMask: .player
-                )
-            )
             
             Bullet(
                 direction: direction

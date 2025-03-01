@@ -10,23 +10,7 @@ import AdaEngine
 extension GameScene {
     func setupLevel() {
         self.generateGrass()
-        
-        self.addEntity(
-            Entity(name: "Terrain") {
-                SpriteComponent(tintColor: Game.groundColor)
-                Transform(rotation: .identity, scale: [30, 6, 1], position: [0, -10.5, 0])
-                Collision2DComponent(
-                    shapes: [
-                        .generateBox()
-                    ],
-                    mode: .default,
-                    filter: CollisionFilter(
-                        categoryBitMask: .obstacles,
-                        collisionBitMask: .player
-                    )
-                )
-            }
-        )
+        self.generateTerrain()
         
         self.addEntity(
             Entity(name: "Duck Hunt Logo") {
@@ -35,23 +19,6 @@ extension GameScene {
             }
         )
         
-//        self.addEntity(
-//            Entity(name: "Grass Layer 1") {
-//                SpriteComponent(tintColor: Color.gray)
-//                Transform(rotation: .identity, scale: [30, 1, 1], position: [0, -3.5, 0])
-//                Collision2DComponent(
-//                    shapes: [
-//                        .generateBox()
-//                    ],
-//                    mode: .default,
-//                    filter: CollisionFilter(
-//                        categoryBitMask: .obstacles,
-//                        collisionBitMask: .player
-//                    )
-//                )
-//            }
-//        )
-//
         self.clouds()
         self.borders()
     }
@@ -86,7 +53,7 @@ extension GameScene {
                 
                 Collision2DComponent(
                     shapes: [.generateBox()],
-                    mode: .trigger,
+                    mode: .default,
                     filter: CollisionFilter(
                         categoryBitMask: .obstacles,
                         collisionBitMask: .player
@@ -103,7 +70,7 @@ extension GameScene {
                 
                 Collision2DComponent(
                     shapes: [.generateBox()],
-                    mode: .trigger,
+                    mode: .default,
                     filter: CollisionFilter(
                         categoryBitMask: .obstacles,
                         collisionBitMask: .player
@@ -120,7 +87,7 @@ extension GameScene {
                 
                 Collision2DComponent(
                     shapes: [.generateBox()],
-                    mode: .trigger,
+                    mode: .default,
                     filter: CollisionFilter(
                         categoryBitMask: .obstacles,
                         collisionBitMask: .player
@@ -152,7 +119,7 @@ extension GameScene {
     
     private func generateGrass() {
         var position: Float = -12
-        for index in 0..<10 {
+        for index in 0..<26 {
             self.addEntity(
                 Entity(name: "Grass \(index)") {
                     SpriteComponent(
@@ -160,18 +127,51 @@ extension GameScene {
                     )
                     Transform(
                         rotation: .identity,
-                        scale: [3, 2, 1],
-                        position: [position, -6.5, 0]
+                        scale: [1, 1, 1],
+                        position: [position, -7, 0]
                     )
                 }
             )
             
-            position += 3
+            position += 1
         }
     }
     
     private func generateTerrain() {
+        self.addEntity(
+            Entity(name: "Terrain") {
+                SpriteComponent(tintColor: Game.groundColor)
+                Transform(rotation: .identity, scale: [26, 5, 1], position: [0, -10.5, 0])
+                Collision2DComponent(
+                    shapes: [
+                        .generateBox()
+                    ],
+                    mode: .default,
+                    filter: CollisionFilter(
+                        categoryBitMask: .obstacles,
+                        collisionBitMask: .player
+                    )
+                )
+            }
+        )
         
+        var position: Float = -12
+        for _ in 0..<26 {
+            self.addEntity(
+                Entity(name: "Terrain") {
+                    SpriteComponent(
+                        texture: miscAtlas[Int.random(in: 3...4), 4]
+                    )
+                    Transform(
+                        rotation: .identity,
+                        scale: [1, 1, 1],
+                        position: [position, -8, 1]
+                    )
+                }
+            )
+            
+            position += 1
+        }
     }
 }
 
