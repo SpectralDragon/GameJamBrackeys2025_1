@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 48FF771E2D63437900EFBEAC /* AdaEngine */; };
+		7C9CA0A02D72EC4C00404397 /* AdaEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9CA09F2D72EC4C00404397 /* AdaEngine */; };
+		7C9CA0A22D72EC4C00404397 /* AdaEngineEmbeddable in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9CA0A12D72EC4C00404397 /* AdaEngineEmbeddable */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C9CA0A22D72EC4C00404397 /* AdaEngineEmbeddable in Frameworks */,
 				48FF771F2D63437900EFBEAC /* AdaEngine in Frameworks */,
+				7C9CA0A02D72EC4C00404397 /* AdaEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +83,8 @@
 			name = Brackeys2025;
 			packageProductDependencies = (
 				48FF771E2D63437900EFBEAC /* AdaEngine */,
+				7C9CA09F2D72EC4C00404397 /* AdaEngine */,
+				7C9CA0A12D72EC4C00404397 /* AdaEngineEmbeddable */,
 			);
 			productName = Brackeys2025;
 			productReference = 48FF770B2D63433400EFBEAC /* Brackeys2025.app */;
@@ -109,7 +115,7 @@
 			mainGroup = 48FF77022D63433400EFBEAC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				7C9CA0452D727DC000404397 /* XCLocalSwiftPackageReference "../AdaEngine" */,
+				7C9CA09E2D72EC4C00404397 /* XCRemoteSwiftPackageReference "AdaEngine" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 48FF770C2D63433400EFBEAC /* Products */;
@@ -367,17 +373,31 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		7C9CA0452D727DC000404397 /* XCLocalSwiftPackageReference "../AdaEngine" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../AdaEngine;
+/* Begin XCRemoteSwiftPackageReference section */
+		7C9CA09E2D72EC4C00404397 /* XCRemoteSwiftPackageReference "AdaEngine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AdaEngine/AdaEngine";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		48FF771E2D63437900EFBEAC /* AdaEngine */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AdaEngine;
+		};
+		7C9CA09F2D72EC4C00404397 /* AdaEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C9CA09E2D72EC4C00404397 /* XCRemoteSwiftPackageReference "AdaEngine" */;
+			productName = AdaEngine;
+		};
+		7C9CA0A12D72EC4C00404397 /* AdaEngineEmbeddable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C9CA09E2D72EC4C00404397 /* XCRemoteSwiftPackageReference "AdaEngine" */;
+			productName = AdaEngineEmbeddable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

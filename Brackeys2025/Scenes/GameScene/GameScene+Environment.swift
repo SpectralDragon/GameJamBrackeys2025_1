@@ -141,7 +141,7 @@ extension GameScene {
         self.addEntity(
             Entity(name: "Terrain") {
                 SpriteComponent(tintColor: Game.groundColor)
-                Transform(rotation: .identity, scale: [26, 5, 1], position: [0, -10.5, 0])
+                Transform(rotation: .identity, scale: [26, 6, 1], position: [0, -10.5, 0])
                 Collision2DComponent(
                     shapes: [
                         .generateBox()

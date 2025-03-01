@@ -37,7 +37,7 @@ class GameScene: Scene {
         Game.isPaused = false
         
         #if DEBUG
-        self.debugOptions = [.showPhysicsShapes]
+//        self.debugOptions = [.showPhysicsShapes]
         #endif
         
         Task { @MainActor in
